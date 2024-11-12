@@ -1,22 +1,17 @@
-function beats(className, soundName) {
+const numberOfDrumButtons = document.querySelectorAll(".drum").length;
+
+for (let i = 0; i < numberOfDrumButtons; i++) {
     document
-        .querySelector(`.${className}`)
-        .addEventListener("click", function () {
-            const audio = new Audio(`./sounds/${soundName}.mp3`);
-            audio.play();
+        .querySelectorAll(".drum")
+        [i].addEventListener("click", function () {
+            let buttonInnerHTML = this.innerHTML;
+            makeSound(buttonInnerHTML);
+
+            buttonAnimation(buttonInnerHTML);
         });
 }
 
-beats("w", "crash");
-beats("a", "kick-bass");
-beats("s", "snare");
-beats("d", "tom-1");
-beats("j", "tom-2");
-beats("k", "tom-3");
-beats("l", "tom-4");
-
-document.addEventListener("keydown", function (event) {
-    const key = event.key;
+function makeSound(key) {
     switch (key) {
         case "w":
             const crash = new Audio(`./sounds/crash.mp3`);
@@ -49,4 +44,19 @@ document.addEventListener("keydown", function (event) {
         default:
             break;
     }
+}
+
+function buttonAnimation(key) {
+    const activeButton = document.querySelector(`.${key}`);
+
+    activeButton.setAttribute("class", `${key} drum pressed`);
+
+    setTimeout(function () {
+        activeButton.classList.remove("pressed");
+    }, 150);
+}
+
+document.addEventListener("keydown", function (event) {
+    makeSound(event.key);
+    buttonAnimation(event.key);
 });
